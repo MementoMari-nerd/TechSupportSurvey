@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customer Feedback Survey</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    .survey-container {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 1.5rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 0.4rem;
+      display: block;
+      color: #222;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      margin-right: 0.5rem;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    button {
+      background-color: #0078ff;
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #005fcc;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .radio-group,
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-top: 0.5rem;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      color: #777;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="survey-container">
+    <h1>Tech Support Feedback Survey</h1>
+
+    <form id="survey-form">
+      <div class="form-group">
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" name="name" placeholder="Enter your full name" required />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address:</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required />
+      </div>
+
+      <div class="form-group">
+        <label>How satisfied are you with our service?</label>
+        <div class="radio-group">
+          <label><input type="radio" name="satisfaction" value="Very satisfied" required /> Very satisfied</label>
+          <label><input type="radio" name="satisfaction" value="Satisfied" /> Satisfied</label>
+          <label><input type="radio" name="satisfaction" value="Neutral" /> Neutral</label>
+          <label><input type="radio" name="satisfaction" value="Dissatisfied" /> Dissatisfied</label>
+          <label><input type="radio" name="satisfaction" value="Very dissatisfied" /> Very dissatisfied</label>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <label for="recommend">Would you recommend us to a friend?</label>
+        <select id="recommend" name="recommend" required>
+          <option value="">-- Select an option --</option>
+          <option value="Yes">Yes</option>
+          <option value="Maybe">Maybe</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="comments">Additional comments:</label>
+        <textarea id="comments" name="comments" placeholder="Share your thoughts..."></textarea>
+      </div>
+
+      <button type="submit">Submit Survey</button>
+    </form>
+
+    <footer>Thank you for your feedback!</footer>
+  </div>
+
+  <script>
+    const form = document.getElementById('survey-form');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const data = {
+        name: form.name.value,
+        email: form.email.value,
+        satisfaction: form.satisfaction.value,
+        features: Array.from(form.querySelectorAll('input[name="features"]:checked'))
+          .map(f => f.value)
+          .join(', '),
+        recommend: form.recommend.value,
+        comments: form.comments.value
+      };
+
+      // Replace with your actual Google Apps Script Web App URL:
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbwvi2XkknBieEqzV_34XBdZdD3Aauseujcbenqrmc4OxNc5Ae2YllxI2kiJxsSmMabA4g/exec';
+
+      fetch(scriptURL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(() => {
+        alert('✅ Thank you! Your response has been recorded.');
+        form.reset();
+      })
+      .catch((err) => {
+        alert('❌ Error submitting form: ' + err.message);
+      });
+    });
+  </script>
+</body>
+</html>
